@@ -40,7 +40,25 @@
 - On-device debugging/Just-In-Time (JIT) compilation for supported apps via [`idevice`](https://github.com/jkcoxson/idevice).  
 - No special VPN/Network Extension entitlements required.  
 - Native UI for managing debugging/JIT-enabling.  
-- No data collection—ensuring full privacy. 
+- No data collection—ensuring full privacy.
+- **iOS Shortcuts support** - Kill the `backboardd` process (soft SpringBoard restart) via Siri or the Shortcuts app. 
+
+## Using iOS Shortcuts
+
+StikDebug now supports iOS Shortcuts (iOS 16.0+), allowing you to trigger a SpringBoard restart via Siri or the Shortcuts app without opening the app:
+
+### Setup
+1. Ensure your device is connected and the heartbeat is active in StikDebug
+2. Open the **Shortcuts** app on your iOS device
+3. The "Kill Backboardd" action will appear automatically in your shortcuts library
+
+### Usage
+You can invoke the shortcut by:
+- Saying to Siri: **"Kill backboardd with StikDebug"** or **"Restart SpringBoard with StikDebug"**
+- Running the shortcut manually from the Shortcuts app
+- Adding it to automation workflows
+
+**Note:** The heartbeat connection must be active for the shortcut to work. If the heartbeat is not active, you'll receive an error message.
 
 ## License  
 StikDebug is licensed under **AGPL-3.0**. See [`LICENSE`](LICENSE) for details.  
