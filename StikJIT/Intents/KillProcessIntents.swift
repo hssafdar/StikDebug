@@ -145,8 +145,11 @@ private func killProcess(processName: String, successMessage: String, processDes
         // Clean the path by removing file:// prefix if present
         let cleanPath = path.replacingOccurrences(of: "file://", with: "")
         
-        // Check if this is our target process (case-insensitive, partial match)
-        if cleanPath.lowercased().contains(processName.lowercased()) {
+        // Check if this is our target process using suffix or exact match for precision
+        // This prevents false positives (e.g., searching 'media' shouldn't match both 'mediaserverd' and 'mediaplaybackd')
+        let lowerCleanPath = cleanPath.lowercased()
+        let lowerProcessName = processName.lowercased()
+        if lowerCleanPath.hasSuffix("/\(lowerProcessName)") || lowerCleanPath == lowerProcessName {
             targetPID = Int32(pidNumber.intValue)
             break
         }

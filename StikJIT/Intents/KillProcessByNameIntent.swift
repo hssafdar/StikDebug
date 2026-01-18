@@ -59,8 +59,11 @@ struct KillProcessByNameIntent: AppIntent {
             // Clean the path by removing file:// prefix if present
             let cleanPath = path.replacingOccurrences(of: "file://", with: "")
             
-            // Check if this is our target process (case-insensitive, partial match)
-            if cleanPath.lowercased().contains(trimmedProcessName.lowercased()) {
+            // Check if this is our target process using suffix or exact match for precision
+            // This prevents false positives when users provide ambiguous process names
+            let lowerCleanPath = cleanPath.lowercased()
+            let lowerTrimmedName = trimmedProcessName.lowercased()
+            if lowerCleanPath.hasSuffix("/\(lowerTrimmedName)") || lowerCleanPath == lowerTrimmedName {
                 targetPID = Int32(pidNumber.intValue)
                 foundPath = cleanPath
                 break
