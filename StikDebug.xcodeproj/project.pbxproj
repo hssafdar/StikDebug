@@ -56,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8B5142C39F166B43D6F8F832 /* KillBackboarddIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KillBackboarddIntent.swift; path = StikJIT/KillBackboarddIntent.swift; sourceTree = SOURCE_ROOT; };
 		DC139F6C2DE97EA400F63846 /* DebugWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DebugWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC139F6D2DE97EA400F63846 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		DC139F6F2DE97EA400F63846 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -63,17 +64,18 @@
 		DC6F1D372D94EADD0071B2B6 /* StikDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StikDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC6F1D482D94EADF0071B2B6 /* StikDebugTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StikDebugTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC6F1D522D94EADF0071B2B6 /* StikDebugUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StikDebugUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDFF4848A93300C3B463AFB2 /* StikDebugShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StikDebugShortcuts.swift; path = StikJIT/StikDebugShortcuts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1775D3612D9644FD00DFA8E0 /* Exceptions for "StikJIT" folder in "StikDebug" target */ = {
+		1775D3612D9644FD00DFA8E0 = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = DC6F1D362D94EADD0071B2B6 /* StikDebug */;
 		};
-		DC139F852DE97EA600F63846 /* Exceptions for "DebugWidget" folder in "DebugWidgetExtension" target */ = {
+		DC139F852DE97EA600F63846 = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -83,32 +85,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		DC139F712DE97EA400F63846 /* DebugWidget */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				DC139F852DE97EA600F63846 /* Exceptions for "DebugWidget" folder in "DebugWidgetExtension" target */,
-			);
-			path = DebugWidget;
-			sourceTree = "<group>";
-		};
-		DC6F1D392D94EADD0071B2B6 /* StikJIT */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				1775D3612D9644FD00DFA8E0 /* Exceptions for "StikJIT" folder in "StikDebug" target */,
-			);
-			path = StikJIT;
-			sourceTree = "<group>";
-		};
-		DC6F1D4B2D94EADF0071B2B6 /* StikJITTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = StikJITTests;
-			sourceTree = "<group>";
-		};
-		DC6F1D552D94EADF0071B2B6 /* StikJITUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = StikJITUITests;
-			sourceTree = "<group>";
-		};
+		DC139F712DE97EA400F63846 /* DebugWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (DC139F852DE97EA600F63846, ); path = DebugWidget; sourceTree = "<group>"; };
+		DC6F1D392D94EADD0071B2B6 /* StikJIT */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (1775D3612D9644FD00DFA8E0, ); path = StikJIT; sourceTree = "<group>"; };
+		DC6F1D4B2D94EADF0071B2B6 /* StikJITTests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = StikJITTests; sourceTree = "<group>"; };
+		DC6F1D552D94EADF0071B2B6 /* StikJITUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = StikJITUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +140,8 @@
 				DC139F712DE97EA400F63846 /* DebugWidget */,
 				DC6F1D752D94EB620071B2B6 /* Frameworks */,
 				DC6F1D382D94EADD0071B2B6 /* Products */,
+				8B5142C39F166B43D6F8F832 /* KillBackboarddIntent.swift */,
+				FDFF4848A93300C3B463AFB2 /* StikDebugShortcuts.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -440,6 +422,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/StikJIT";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stik.stikdebug.DebugWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -470,6 +453,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/StikJIT";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stik.stikdebug.DebugWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -636,6 +620,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/StikJIT/idevice",
+					"$(SRCROOT)/StikJIT",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
 				MARKETING_VERSION = 2.3.7;
@@ -694,6 +679,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/StikJIT/idevice",
+					"$(SRCROOT)/StikJIT",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
 				MARKETING_VERSION = 2.3.7;
@@ -720,6 +706,7 @@
 				DEVELOPMENT_TEAM = SZ977XLF24;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/StikJIT";
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stik.StikJITTests;
@@ -743,6 +730,7 @@
 				DEVELOPMENT_TEAM = SZ977XLF24;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/StikJIT";
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stik.StikJITTests;
@@ -765,6 +753,7 @@
 				DEVELOPMENT_TEAM = SZ977XLF24;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/StikJIT";
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stik.StikJITUITests;
@@ -787,6 +776,7 @@
 				DEVELOPMENT_TEAM = SZ977XLF24;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/StikJIT";
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stik.StikJITUITests;
