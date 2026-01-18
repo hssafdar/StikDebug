@@ -51,24 +51,28 @@ struct KillBackboarddIntent: AppIntent {
             throw KillBackboarddError.failedToFetchProcesses(errorMessage)
         }
         
+        // Helper function to extract PID from process dictionary
+        func extractPID(from dict: NSDictionary) -> Int32? {
+            guard let pidNumber = dict["pid"] as? NSNumber else { return nil }
+            return Int32(pidNumber.intValue)
+        }
+        
         // Find backboardd process
         var backboarddPID: Int32?
         for item in processList {
             guard let processDict = item as? NSDictionary else { continue }
             
-            // Check if this is backboardd by name or path
-            if let name = processDict["name"] as? String,
-               name == "backboardd" {
-                if let pidNumber = processDict["pid"] as? NSNumber {
-                    backboarddPID = Int32(pidNumber.intValue)
-                    break
-                }
+            // Check if this is backboardd by name
+            if let name = processDict["name"] as? String, name == "backboardd" {
+                backboarddPID = extractPID(from: processDict)
+                break
             }
             
-            if let executablePath = processDict["path"] as? String,
-               executablePath.contains("backboardd") {
-                if let pidNumber = processDict["pid"] as? NSNumber {
-                    backboarddPID = Int32(pidNumber.intValue)
+            // Check if this is backboardd by path (more precise matching)
+            if let executablePath = processDict["path"] as? String {
+                let cleanedPath = executablePath.replacingOccurrences(of: "file://", with: "")
+                if cleanedPath.hasSuffix("/backboardd") || cleanedPath == "backboardd" {
+                    backboarddPID = extractPID(from: processDict)
                     break
                 }
             }
