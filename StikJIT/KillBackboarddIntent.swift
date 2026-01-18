@@ -17,8 +17,11 @@ struct KillBackboarddIntent: AppIntent {
     static var openAppWhenRun: Bool = false
     
     func perform() async throws -> some IntentResult & ProvidesDialog {
-        // Check if heartbeat is active by checking lastHeartbeatDate
-        guard let lastHeartbeat = lastHeartbeatDate,
+        // Check if heartbeat is active by checking lastHeartbeatDate and globalHeartbeatToken
+        // globalHeartbeatToken > 0 means a heartbeat has been started
+        // lastHeartbeatDate within 15 seconds means it's still active
+        guard globalHeartbeatToken > 0,
+              let lastHeartbeat = lastHeartbeatDate,
               Date().timeIntervalSince(lastHeartbeat as Date) <= 15 else {
             return .result(dialog: "❌ Heartbeat connection is not active. Please ensure the device is connected and the heartbeat is running in StikDebug.")
         }
@@ -42,8 +45,9 @@ struct KillBackboarddIntent: AppIntent {
             // Clean the path by removing file:// prefix if present
             let cleanPath = path.replacingOccurrences(of: "file://", with: "")
             
-            // Check if this is backboardd by checking the path
-            if cleanPath.contains("/backboardd") {
+            // Check if this is backboardd by checking if the path ends with /backboardd
+            // This is more specific than just checking if it contains the string
+            if cleanPath.hasSuffix("/backboardd") || cleanPath == "backboardd" {
                 backboarddPID = Int32(pidNumber.intValue)
                 break
             }
