@@ -8,6 +8,9 @@
 import AppIntents
 import Foundation
 
+// Constants
+private let heartbeatStartupDelay: UInt64 = 2_000_000_000 // 2 seconds in nanoseconds
+
 @available(iOS 16.0, *)
 struct LaunchAndStartHeartbeatIntent: AppIntent {
     static var title: LocalizedStringResource = "Launch StikDebug and Start Heartbeat"
@@ -39,7 +42,7 @@ struct LaunchAndStartHeartbeatIntent: AppIntent {
         }
         
         // Wait a bit for the heartbeat to start
-        try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+        try await Task.sleep(nanoseconds: heartbeatStartupDelay)
         
         // Check if heartbeat started successfully
         if globalHeartbeatToken > 0,
