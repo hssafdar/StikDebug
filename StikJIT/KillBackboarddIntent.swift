@@ -57,16 +57,20 @@ struct KillBackboarddIntent: AppIntent {
             guard let processDict = item as? NSDictionary else { continue }
             
             // Check if this is backboardd by name or path
-            if let name = processDict["Name"] as? String,
+            if let name = processDict["name"] as? String,
                name == "backboardd" {
-                backboarddPID = processDict["Pid"] as? Int32
-                break
+                if let pidNumber = processDict["pid"] as? NSNumber {
+                    backboarddPID = Int32(pidNumber.intValue)
+                    break
+                }
             }
             
-            if let executablePath = processDict["ExecutablePath"] as? String,
+            if let executablePath = processDict["path"] as? String,
                executablePath.contains("backboardd") {
-                backboarddPID = processDict["Pid"] as? Int32
-                break
+                if let pidNumber = processDict["pid"] as? NSNumber {
+                    backboarddPID = Int32(pidNumber.intValue)
+                    break
+                }
             }
         }
         
