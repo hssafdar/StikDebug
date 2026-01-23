@@ -86,12 +86,15 @@ struct LaunchAndStartHeartbeatIntent: AppIntent {
     }
     
     // Attempt to minimize the app to return to previous app
+    // NOTE: This uses the App-prefs: URL scheme as a workaround since iOS doesn't
+    // provide a direct API to "go back" to the previous app. This approach may not
+    // work reliably across all iOS versions and relies on undocumented behavior.
+    // If this doesn't work, the user will remain in the StikDebug app and can
+    // manually switch to another app. The haptic feedback above signals success.
     private func minimizeApp() async {
         await MainActor.run {
             #if canImport(UIKit)
             // Try to minimize the app by opening a system URL
-            // This is a workaround since iOS doesn't allow directly "going back"
-            // Opening App-prefs: briefly can cause the app to minimize
             if let url = URL(string: "App-prefs:") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }

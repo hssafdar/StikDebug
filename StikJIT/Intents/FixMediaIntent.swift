@@ -40,7 +40,7 @@ struct FixMediaIntent: AppIntent {
         ]
         
         for (processName, displayName) in processesToKill {
-            if let pid = findProcess(named: processName, in: processList) {
+            if let pid = findProcessByName(processName, in: processList) {
                 var killError: NSError?
                 let success = KillDeviceProcess(pid, &killError)
                 
@@ -57,27 +57,5 @@ struct FixMediaIntent: AppIntent {
         
         let resultMessage = results.joined(separator: "\n")
         return .result(dialog: "Media services fix completed:\n\n\(resultMessage)")
-    }
-    
-    // Helper function to find a process by name
-    private func findProcess(named processName: String, in processList: NSArray) -> Int32? {
-        for item in processList {
-            guard let processDict = item as? NSDictionary,
-                  let pidNumber = processDict["pid"] as? NSNumber,
-                  let path = processDict["path"] as? String else {
-                continue
-            }
-            
-            // Clean the path by removing file:// prefix if present
-            let cleanPath = path.replacingOccurrences(of: "file://", with: "")
-            
-            // Check if this is our target process using suffix or exact match
-            let lowerCleanPath = cleanPath.lowercased()
-            let lowerProcessName = processName.lowercased()
-            if lowerCleanPath.hasSuffix("/\(lowerProcessName)") || lowerCleanPath == lowerProcessName {
-                return Int32(pidNumber.intValue)
-            }
-        }
-        return nil
     }
 }
