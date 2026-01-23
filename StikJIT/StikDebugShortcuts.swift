@@ -24,6 +24,32 @@ struct StikDebugShortcuts: AppShortcutsProvider {
                 systemImageName: "heart.fill"
             ),
             
+            // Fix Media Services (Combined)
+            AppShortcut(
+                intent: FixMediaIntent(),
+                phrases: [
+                    "Fix media with \(.applicationName)",
+                    "Fix audio with \(.applicationName)",
+                    "Restart media services with \(.applicationName)",
+                    "Fix audio and media with \(.applicationName)"
+                ],
+                shortTitle: "Fix Media",
+                systemImageName: "speaker.wave.3.fill"
+            ),
+            
+            // Fix Connectivity Services (Combined)
+            AppShortcut(
+                intent: FixConnectivityIntent(),
+                phrases: [
+                    "Fix connectivity with \(.applicationName)",
+                    "Fix network with \(.applicationName)",
+                    "Restart network services with \(.applicationName)",
+                    "Fix WiFi and Bluetooth with \(.applicationName)"
+                ],
+                shortTitle: "Fix Connectivity",
+                systemImageName: "network"
+            ),
+            
             // Kill Backboardd
             AppShortcut(
                 intent: KillBackboarddIntent(),
@@ -56,7 +82,6 @@ struct StikDebugShortcuts: AppShortcutsProvider {
                 phrases: [
                     "Kill mediaserverd with \(.applicationName)",
                     "Restart audio with \(.applicationName)",
-                    "Fix audio with \(.applicationName)",
                     "Fix audio glitches with \(.applicationName)"
                 ],
                 shortTitle: "Kill MediaServerd",

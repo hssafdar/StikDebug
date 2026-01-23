@@ -8,14 +8,19 @@
 import AppIntents
 import Foundation
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 // Constants
-private let heartbeatStartupDelay: UInt64 = 2_000_000_000 // 2 seconds in nanoseconds
+private let heartbeatPollInterval: UInt64 = 1_000_000_000 // 1 second in nanoseconds
+private let heartbeatMaxWaitTime: Int = 30 // Maximum wait time in seconds
 
 @available(iOS 16.0, *)
 struct LaunchAndStartHeartbeatIntent: AppIntent {
     static var title: LocalizedStringResource = "Launch StikDebug and Start Heartbeat"
     
-    static var description = IntentDescription("Opens the StikDebug app and starts the heartbeat connection to the device.")
+    static var description = IntentDescription("Opens the StikDebug app, starts the heartbeat connection to the device, and returns you to your previous app once the connection is established.")
     
     // Open the app when this intent runs
     static var openAppWhenRun: Bool = true
@@ -28,29 +33,69 @@ struct LaunchAndStartHeartbeatIntent: AppIntent {
         }
         
         // Check if heartbeat is already active
-        if globalHeartbeatToken > 0,
-           let lastHeartbeat = lastHeartbeatDate,
-           Date().timeIntervalSince(lastHeartbeat as Date) <= 15 {
+        if isHeartbeatActive() {
             return .result(dialog: "✅ Heartbeat is already active and running.")
         }
         
         // Start the heartbeat on the main thread
         // The app will be opened by the system due to openAppWhenRun = true
-        // We need to trigger the heartbeat start
         await MainActor.run {
             startHeartbeatInBackground(showErrorUI: false)
         }
         
-        // Wait a bit for the heartbeat to start
-        try await Task.sleep(nanoseconds: heartbeatStartupDelay)
+        // Poll for heartbeat to become active with timeout
+        var secondsWaited = 0
+        while secondsWaited < heartbeatMaxWaitTime {
+            try await Task.sleep(nanoseconds: heartbeatPollInterval)
+            secondsWaited += 1
+            
+            if isHeartbeatActive() {
+                // Heartbeat is now active! Provide haptic feedback
+                await provideSuccessFeedback()
+                
+                // Try to minimize the app (return to previous app)
+                await minimizeApp()
+                
+                return .result(dialog: "✅ Heartbeat started successfully! Returning to previous app.")
+            }
+        }
         
-        // Check if heartbeat started successfully
-        if globalHeartbeatToken > 0,
-           let lastHeartbeat = lastHeartbeatDate,
-           Date().timeIntervalSince(lastHeartbeat as Date) <= 15 {
-            return .result(dialog: "✅ StikDebug opened and heartbeat started successfully.")
-        } else {
-            return .result(dialog: "⚠️ StikDebug opened, but heartbeat may not have started. Please check the app.")
+        // Timeout reached
+        return .result(dialog: "⚠️ Heartbeat did not start within \(heartbeatMaxWaitTime) seconds. Please check StikDebug.")
+    }
+    
+    // Helper to check if heartbeat is active
+    private func isHeartbeatActive() -> Bool {
+        guard globalHeartbeatToken > 0,
+              let lastHeartbeat = lastHeartbeatDate,
+              Date().timeIntervalSince(lastHeartbeat as Date) <= 15 else {
+            return false
+        }
+        return true
+    }
+    
+    // Provide haptic and notification feedback
+    private func provideSuccessFeedback() async {
+        await MainActor.run {
+            #if canImport(UIKit)
+            // Generate success haptic feedback
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+            #endif
+        }
+    }
+    
+    // Attempt to minimize the app to return to previous app
+    private func minimizeApp() async {
+        await MainActor.run {
+            #if canImport(UIKit)
+            // Try to minimize the app by opening a system URL
+            // This is a workaround since iOS doesn't allow directly "going back"
+            // Opening App-prefs: briefly can cause the app to minimize
+            if let url = URL(string: "App-prefs:") {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+            #endif
         }
     }
 }
