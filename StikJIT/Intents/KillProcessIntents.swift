@@ -116,7 +116,31 @@ struct KillSpringBoardIntent: AppIntent {
     }
 }
 
-// MARK: - Helper Function
+// MARK: - Helper Functions
+
+/// Helper function to find a process by name in the process list
+@available(iOS 16.0, *)
+func findProcessByName(_ processName: String, in processList: NSArray) -> Int32? {
+    for item in processList {
+        guard let processDict = item as? NSDictionary,
+              let pidNumber = processDict["pid"] as? NSNumber,
+              let path = processDict["path"] as? String else {
+            continue
+        }
+        
+        // Clean the path by removing file:// prefix if present
+        let cleanPath = path.replacingOccurrences(of: "file://", with: "")
+        
+        // Check if this is our target process using suffix or exact match
+        let lowerCleanPath = cleanPath.lowercased()
+        let lowerProcessName = processName.lowercased()
+        if lowerCleanPath.hasSuffix("/\(lowerProcessName)") || lowerCleanPath == lowerProcessName {
+            return Int32(pidNumber.intValue)
+        }
+    }
+    return nil
+}
+
 @available(iOS 16.0, *)
 private func killProcess(processName: String, successMessage: String, processDescription: String) async throws -> some IntentResult & ProvidesDialog {
     // Check if heartbeat is active
@@ -134,26 +158,7 @@ private func killProcess(processName: String, successMessage: String, processDes
     }
     
     // Find the target process
-    var targetPID: Int32?
-    for item in processList {
-        guard let processDict = item as? NSDictionary,
-              let pidNumber = processDict["pid"] as? NSNumber,
-              let path = processDict["path"] as? String else {
-            continue
-        }
-        
-        // Clean the path by removing file:// prefix if present
-        let cleanPath = path.replacingOccurrences(of: "file://", with: "")
-        
-        // Check if this is our target process using suffix or exact match for precision
-        // This prevents false positives (e.g., searching 'media' shouldn't match both 'mediaserverd' and 'mediaplaybackd')
-        let lowerCleanPath = cleanPath.lowercased()
-        let lowerProcessName = processName.lowercased()
-        if lowerCleanPath.hasSuffix("/\(lowerProcessName)") || lowerCleanPath == lowerProcessName {
-            targetPID = Int32(pidNumber.intValue)
-            break
-        }
-    }
+    let targetPID = findProcessByName(processName, in: processList)
     
     guard let pid = targetPID else {
         return .result(dialog: "❌ Could not find \(processDescription) process. The process may not be running or may have a different name.")
