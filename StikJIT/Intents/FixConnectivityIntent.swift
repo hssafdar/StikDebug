@@ -34,25 +34,21 @@ struct FixConnectivityIntent: AppIntent {
         
         // Try to kill all connectivity processes
         var results: [String] = []
-        let processesToKill = [
-            ("CommCenter", "CommCenter"),
-            ("wifid", "wifid"),
-            ("bluetoothd", "bluetoothd")
-        ]
+        let processesToKill = ["CommCenter", "wifid", "bluetoothd"]
         
-        for (processName, displayName) in processesToKill {
+        for processName in processesToKill {
             if let pid = findProcessByName(processName, in: processList) {
                 var killError: NSError?
                 let success = KillDeviceProcess(pid, &killError)
                 
                 if success {
-                    results.append("✅ Killed \(displayName) (PID \(pid))")
+                    results.append("✅ Killed \(processName) (PID \(pid))")
                 } else {
                     let errorMessage = killError?.localizedDescription ?? "Unknown error"
-                    results.append("❌ Failed to kill \(displayName) (PID \(pid)): \(errorMessage)")
+                    results.append("❌ Failed to kill \(processName) (PID \(pid)): \(errorMessage)")
                 }
             } else {
-                results.append("⚠️ \(displayName) not found (may not be running)")
+                results.append("⚠️ \(processName) not found (may not be running)")
             }
         }
         

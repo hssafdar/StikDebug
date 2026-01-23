@@ -34,24 +34,21 @@ struct FixMediaIntent: AppIntent {
         
         // Try to kill both media processes
         var results: [String] = []
-        let processesToKill = [
-            ("mediaserverd", "mediaserverd"),
-            ("mediaplaybackd", "mediaplaybackd")
-        ]
+        let processesToKill = ["mediaserverd", "mediaplaybackd"]
         
-        for (processName, displayName) in processesToKill {
+        for processName in processesToKill {
             if let pid = findProcessByName(processName, in: processList) {
                 var killError: NSError?
                 let success = KillDeviceProcess(pid, &killError)
                 
                 if success {
-                    results.append("✅ Killed \(displayName) (PID \(pid))")
+                    results.append("✅ Killed \(processName) (PID \(pid))")
                 } else {
                     let errorMessage = killError?.localizedDescription ?? "Unknown error"
-                    results.append("❌ Failed to kill \(displayName) (PID \(pid)): \(errorMessage)")
+                    results.append("❌ Failed to kill \(processName) (PID \(pid)): \(errorMessage)")
                 }
             } else {
-                results.append("⚠️ \(displayName) not found (may not be running)")
+                results.append("⚠️ \(processName) not found (may not be running)")
             }
         }
         
